@@ -10,6 +10,23 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+# EMAIL VERIFICATION BACKEND CODE
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'patilsainath517@gmail.com'
+EMAIL_HOST_PASSWORD = 'uucn synf gsjd nalj'
+#EMAIL_HOST_PASSWORD = 'ovnpwpjtypzydtxs'
+
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+# Define OTP expiry time (optional)
+OTP_EXPIRATION_TIME = 300  # 5 minutes
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -26,11 +43,28 @@ SECRET_KEY = 'django-insecure-utb0cf8e&km))m8jm*h)8s24h9d$38zp_ad_a^og@0hqt$ptaj
 DEBUG = True
 
 ALLOWED_HOSTS = []
+#ALL LOGIN BACKEND 
 
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'login'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+#Email setup od smtp
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'patilsainath517@gmail.com'
+EMAIL_HOST_PASSWORD = 'uucn synf gsjd nalj'
+#EMAIL_HOST_PASSWORD = 'ovnpwpjtypzydtxs'
 
 # Application definition
 
 INSTALLED_APPS = [
+    'first_app',
+    'add_writer',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

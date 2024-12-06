@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - Bulletin Portal</title>
+
+  <!-- External Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+
+  <!-- CSS for Styling -->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f4f7fb;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    /* Header Styling */
+    .header {
+      width: 100%;
+      background-color: #1f1f1f;
+      color: #fff;
+      padding: 20px 0;
+      text-align: center;
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      margin-bottom: 40px;
+    }
+
+    .header span {
+      color: #f39c12; /* Golden color for Bulletin */
+    }
+
+    /* Container Styling */
+    .container {
+      background: #fff;
+      padding: 30px 40px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      width: 100%;
+      max-width: 450px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 24px;
+      color: #333;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    label {
+      font-size: 14px;
+      color: #555;
+    }
+
+    input {
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      color: #333;
+      background-color: #f9f9f9;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #f39c12;
+    }
+
+    button {
+      background-color: #f39c12;
+      color: #fff;
+      padding: 15px;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #e67e22;
+    }
+
+    .link {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+
+    .link a {
+      color: #3498db;
+      text-decoration: none;
+    }
+
+    .link a:hover {
+      text-decoration: underline;
+    }
+
+    .error-message {
+      color: #e74c3c;
+      font-size: 14px;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    /* Footer Styling */
+    .footer {
+      width: 100%;
+      background-color: #1f1f1f;
+      color: #fff;
+      padding: 10px 0;
+      text-align: center;
+      font-size: 14px;
+      margin-top: 40px;
+    }
+
+    .privacy-policy {
+      margin-top: 10px;
+    }
+
+    .privacy-policy a {
+      color: #3498db;
+      text-decoration: none;
+    }
+
+    .privacy-policy a:hover {
+      text-decoration: underline;
+    }
+  </style>
+
+  <!-- JS for Interactivity -->
+  <script>
+    function validateForm(event) {
+      const inputs = document.querySelectorAll("input");
+      let valid = true;
+
+      inputs.forEach((input) => {
+        if (!input.value.trim()) {
+          valid = false;
+          input.style.border = "1px solid #e74c3c";
+        } else {
+          input.style.border = "1px solid #ddd";
+        }
+      });
+
+      if (!valid) {
+        event.preventDefault();
+        document.getElementById("error-message").innerText =
+          "All fields are required.";
+      }
+    }
+  </script>
+</head>
+<body>
+
+  <!-- Header Section -->
+  <div class="header">
+    <span>Bulletin</span> Board
+  </div>
+
+  <!-- Login Form Container -->
+  <div class="container">
+    <h1>Login</h1>
+
+    <form method="post" onsubmit="validateForm(event)">
+      {% csrf_token %}
+      <div id="error-message" class="error-message"></div>
+      {{ form.as_p }}
+      <button type="submit">Login</button>
+    </form>
+
+    <div class="link">
+      <p>
+        Don't have an account? <a href="{% url 'signup' %}">Sign up here</a>.
+      </p>
+      <p>
+        Forgot your Password? <a href="{% url 'password_reset' %}">Reset here</a>.
+      </p>
+    </div>
+  </div>
+
+  <!-- Footer Section -->
+  <div class="footer">
+    <div class="privacy-policy">
+      <a href="">
+        <i class="footer-icon">🔒</i> Privacy Policy
+      </a>
+    </div>
+  </div>
+
+</body>
+</html>

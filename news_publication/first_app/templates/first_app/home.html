@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bulletin Board</title>
+
+  <!-- CSS for Styling -->
+  <style>
+    /* Reset default styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f4f7fa;
+      display: flex;
+      flex-direction: row;
+      height: 100vh;
+      flex-wrap: nowrap;
+    }
+
+    /* Sidebar Styling */
+    .sidebar {
+      width: 250px;
+      background: #2c3e50;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar .user-info {
+      text-align: center;
+      margin-bottom: 20px;
+      padding: 10px 0;
+      border-bottom: 1px solid #34495e;
+    }
+
+    .sidebar .user-info p {
+      margin: 0;
+      font-size: 18px;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .sidebar ul li {
+      margin: 15px 0;
+    }
+
+    .sidebar ul li a {
+      color: #ecf0f1;
+      text-decoration: none;
+      padding: 12px 20px;
+      display: block;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+
+    .sidebar ul li a:hover {
+      background: #34495e;
+    }
+
+    /* Main Content Styling */
+    .main-content {
+      flex: 1;
+      padding: 25px;
+      display: flex;
+      flex-direction: column;
+      background: #ecf0f1;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .header {
+      background: #2980b9;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+      font-size: 28px;
+      font-weight: bold;
+      border-radius: 5px;
+      margin-bottom: 25px;
+    }
+
+    .logout-btn {
+      background: #e74c3c;
+      color: #fff;
+      border: none;
+      padding: 12px 25px;
+      font-size: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-bottom: 25px;
+    }
+
+    .logout-btn:hover {
+      background: #c0392b;
+    }
+
+    .content {
+      flex: 1;
+      text-align: center;
+      font-size: 18px;
+      color: #34495e;
+    }
+
+    .footer {
+      background-color: #34495e;
+      color: #fff;
+      text-align: center;
+      padding: 15px 0;
+      position: absolute;
+      width: 100%;
+      bottom: 0;
+    }
+
+    .footer a {
+      color: #ecf0f1;
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Make sure footer is always at the bottom */
+    .main-content {
+      padding-bottom: 60px; /* Add space for the footer */
+    }
+
+  </style>
+
+  <!-- JS for Logout Confirmation -->
+  <script>
+    function confirmLogout(event) {
+      const isConfirmed = confirm("Are you sure you want to logout?");
+      if (!isConfirmed) {
+        event.preventDefault(); // Prevent form submission if not confirmed
+      }
+    }
+  </script>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="user-info">
+      {% if user.is_authenticated %}
+      <p>{{ user.username }}</p>
+      {% else %}
+      <p>Guest</p>
+      {% endif %}
+    </div>
+    <h2>Menu</h2>
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Add Writer</a></li>
+      <li><a href="#">Aprove Articles</a></li>
+      <li><a href="#">Staticstics</a></li>
+      <li><a href="#">Notice</a></li>
+
+      <li><a href="#">Settings</a></li>
+
+    </ul>
+
+    <!-- Logout Button -->
+    <form method="post" action="{% url 'logout' %}" onsubmit="confirmLogout(event)">
+      {% csrf_token %}
+      <button type="submit" class="logout-btn">Logout</button>
+    </form>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+
+    <!-- Header -->
+    <div class="header">Bulletin Board</div>
+
+    
+
+    <!-- Content -->
+    <div class="content">
+      <p>Project is under development</p>
+    </div>
+
+  </div>
+
+  <!-- Footer Section -->
+  <div class="footer">
+    <p>&copy; 2024 Bulletin Portal. All Rights Reserved.</p>
+    <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+  </div>
+
+</body>
+</html>
