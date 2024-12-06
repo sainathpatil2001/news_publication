@@ -64,7 +64,7 @@ EMAIL_HOST_PASSWORD = 'uucn synf gsjd nalj'
 
 INSTALLED_APPS = [
     'first_app',
-    'add_writer',
+    'post_writer',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -88,7 +88,7 @@ ROOT_URLCONF = 'news_publication.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

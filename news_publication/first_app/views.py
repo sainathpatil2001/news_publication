@@ -72,3 +72,31 @@ class CustomLogoutView(LogoutView):
     def dispatch(self, request, *args, **kwargs):
         messages.success(request, "You have been logged out.")
         return super().dispatch(request, *args, **kwargs)
+
+#post writer view
+from django.shortcuts import render, redirect
+from django.http import HttpResponse
+from first_app.models import Writer
+from .forms import WriterLoginForm
+
+def writer_login(request):
+    if request.method == 'POST':
+        form = WriterLoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+
+            # Check if the writer exists in the database
+            try:
+                writer = Writer.objects.get(username=username, password=password)
+                # Login successful, store the username in session
+                request.session['username'] = username
+                return redirect('post_writer_home')  # Redirect to post_writer_home view
+            except Writer.DoesNotExist:
+                # Invalid credentials
+                return HttpResponse("Invalid username or password", status=401)
+    else:
+        form = WriterLoginForm()
+
+    return render(request, 'first_app/writer_login.html', {'form': form})
+

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Writer Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .article-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .article-form label {
+            font-weight: bold;
+        }
+
+        .article-form input,
+        .article-form select,
+        .article-form textarea {
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        .article-form textarea {
+            resize: vertical;
+            height: 200px;
+        }
+
+        .article-form input[type="file"] {
+            padding: 5px;
+        }
+
+        .article-form button {
+            padding: 10px;
+            font-size: 1rem;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .article-form button:hover {
+            background-color: #45a049;
+        }
+
+        .header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+        }
+
+        .header h2 {
+            margin: 0;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h2>Writing Article for {{ writer.first_name }} {{ writer.last_name }} ({{ writer.username }})</h2>
+    </div>
+
+    <div class="container">
+        <h1>Welcome, {{ writer.first_name }} {{ writer.last_name }}!</h1>
+        <p>You are successfully logged in as {{ writer.username }}.</p>
+
+        <h2>Write Your Article</h2>
+
+        <form action="/submit_article/" method="POST" enctype="multipart/form-data" class="article-form">
+            {% csrf_token %}
+
+            <!-- Title Input -->
+            <div>
+                <label for="title">Article Title</label>
+                <input type="text" id="title" name="title" placeholder="Enter the article title" required>
+            </div>
+
+            <!-- Article Body -->
+            <div>
+                <label for="body">Article Body</label>
+                <textarea id="body" name="body" placeholder="Write the article content here" required></textarea>
+            </div>
+
+            <!-- Date Picker -->
+            <div>
+                <label for="date">Article Date</label>
+                <input type="date" id="date" name="date" required>
+            </div>
+
+            <!-- Image Input -->
+            <div>
+                <label for="image">Upload Image</label>
+                <input type="file" id="image" name="image" accept="image/*">
+            </div>
+
+            <!-- URL Input -->
+            <div>
+                <label for="url">Article URL</label>
+                <input type="url" id="url" name="url" placeholder="Enter the article URL (optional)">
+            </div>
+
+            <!-- Tags Input -->
+            <div>
+                <label for="tags">Tags (comma separated)</label>
+                <input type="text" id="tags" name="tags" placeholder="Enter tags for the article (optional)">
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit">Submit Article</button>
+        </form>
+    </div>
+
+    <script>
+        // Optional: You can add JS code for additional functionality (such as validating fields)
+        document.querySelector("form").addEventListener("submit", function(event) {
+            const title = document.getElementById("title").value.trim();
+            const body = document.getElementById("body").value.trim();
+
+            if (!title || !body) {
+                alert("Title and Article Body are required.");
+                event.preventDefault(); // Prevent form submission
+            }
+        });
+    </script>
+</body>
+</html>
