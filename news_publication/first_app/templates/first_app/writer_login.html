@@ -4,13 +4,128 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Writer Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-top: 50px;
+        }
+
+        .login-container {
+            max-width: 400px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .login-container h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: #333;
+            display: block;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+
+        .form-group input:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            display: none;
+        }
+
+    </style>
 </head>
 <body>
-    <h2>Writer Login</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Login</button>
-    </form>
+
+    <div class="login-container">
+        <h3>Writer Login</h3>
+        <form method="post" id="loginForm">
+            {% csrf_token %}
+            
+            <!-- Username Input -->
+            <div class="form-group">
+                <label for="username">Username</label>
+                {{ form.username }}
+            </div>
+
+            <!-- Password Input -->
+            <div class="form-group">
+                <label for="password">Password</label>
+                {{ form.password }}
+            </div>
+
+            <!-- Error Message -->
+            <div class="error-message" id="errorMessage">
+                Please fill in all fields correctly.
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+    <script>
+        // Form validation
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            const username = document.querySelector("#id_username").value.trim();
+            const password = document.querySelector("#id_password").value.trim();
+            const errorMessage = document.getElementById("errorMessage");
+
+            // Check if fields are empty
+            if (!username || !password) {
+                errorMessage.style.display = "block"; // Show error message
+                event.preventDefault(); // Prevent form submission
+            } else {
+                errorMessage.style.display = "none"; // Hide error message
+            }
+        });
+    </script>
+    
 </body>
 </html>

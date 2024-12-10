@@ -6,6 +6,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 from django.contrib import messages
 from django import forms
+from .models import Writer
+from django.shortcuts import render, get_object_or_404, redirect
+
 
 # Custom Signup Form with Email Field
 class CustomUserCreationForm(UserCreationForm):
@@ -99,4 +102,84 @@ def writer_login(request):
         form = WriterLoginForm()
 
     return render(request, 'first_app/writer_login.html', {'form': form})
+
+
+
+from django.shortcuts import render
+from django.http import JsonResponse
+from .models import Writer
+
+def add_writer_login(request):
+    # If it's an AJAX request for search, filter writers
+    search_query = request.GET.get('search', '')
+    if search_query:
+        writers = Writer.objects.filter(username__icontains=search_query)
+    else:
+        writers = Writer.objects.all()
+        
+    return render(request, 'first_app/add_writer_login.html', {'writers': writers})
+
+def search_writers(request):
+    search_query = request.GET.get('search', '')
+    if search_query:
+        writers = Writer.objects.filter(username__icontains=search_query)
+    else:
+        writers = Writer.objects.all()
+        
+    writers_data = [{'id': writer.id, 'username': writer.username, 'first_name': writer.first_name, 'last_name': writer.last_name} for writer in writers]
+    
+    return JsonResponse({'writers': writers_data})
+
+
+def update_writer(request, id):
+    writer = get_object_or_404(Writer, id=id)
+    
+    if request.method == 'POST':
+        writer.first_name = request.POST.get('first_name')
+        writer.last_name = request.POST.get('last_name')
+        writer.password = request.POST.get('password')  # Insecure for real apps
+        writer.save()
+        return redirect('add_writer_login')
+
+    return render(request, 'first_app/update_writer.html', {'writer': writer})
+
+
+def delete_writer(request, id):
+    writer = get_object_or_404(Writer, id=id)
+    writer.delete()
+    return redirect('add_writer_login')
+
+
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import Writer
+
+def add_writer(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+
+        # Validate fields
+        if not username or not password or not first_name or not last_name:
+            messages.error(request, "All fields are required.")
+            return render(request, 'first_app/add_writer.html')
+
+        # Check for duplicate username
+        if Writer.objects.filter(username=username).exists():
+            messages.error(request, "Username already exists.")
+            return render(request, 'first_app/add_writer.html')
+
+        # Save writer to database
+        Writer.objects.create(
+            username=username,
+            password=password,
+            first_name=first_name,
+            last_name=last_name
+        )
+        messages.success(request, "Writer added successfully.")
+        return redirect('add_writer_login')  # Redirect to the writers list view (or another page)
+
+    return render(request, 'first_app/add_writer.html')
 

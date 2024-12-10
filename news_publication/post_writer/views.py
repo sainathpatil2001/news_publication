@@ -22,3 +22,9 @@ def post_writer_home(request):
     else:
         return HttpResponse("You need to log in first.", status=401)
 
+
+def write_new_post(request):
+
+
+
+    return render(request,'post_writer/new_post_write.html')

@@ -3,17 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Post Writer Home</title>
+    <title>Writer Dashboard</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            display: flex;
+            background-color: #f4f4f4;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background-color: #333;
+            color: white;
+            padding-top: 20px;
+            position: fixed;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            z-index: 100;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #fff;
+        }
+
+        .sidebar .profile {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 10px;
+            background-color: #444;
+            border-radius: 5px;
+        }
+
+        .sidebar .profile img {
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            margin-bottom: 10px;
+        }
+
+        .sidebar .profile p {
+            margin: 5px 0;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            padding: 15px;
+            text-align: center;
+            background-color: #444;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar ul li:hover {
+            background-color: #555;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            margin-left: 250px;
+            padding: 30px;
+            width: 100%;
             background-color: #f4f4f4;
         }
 
         h1 {
             color: #333;
+            margin-bottom: 20px;
         }
 
         .container {
@@ -25,6 +92,18 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
+        .header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+        }
+
+        .header h2 {
+            margin: 0;
+        }
+
+        /* Form Styles */
         .article-form {
             display: flex;
             flex-direction: column;
@@ -50,10 +129,6 @@
             height: 200px;
         }
 
-        .article-form input[type="file"] {
-            padding: 5px;
-        }
-
         .article-form button {
             padding: 10px;
             font-size: 1rem;
@@ -68,86 +143,69 @@
             background-color: #45a049;
         }
 
-        .header {
-            background-color: #333;
-            color: #fff;
-            padding: 10px 20px;
-            margin-bottom: 20px;
+        .sidebar ul li.active {
+            background-color: #007BFF;
         }
 
-        .header h2 {
-            margin: 0;
+        /* Logout Button Style */
+        .sidebar .logout-btn {
+            position: absolute;
+            bottom: 20px;
+            width: 50%;
+            margin-left: 30px;
+            margin-bottom: 10px;
+            padding: 15px;
+            text-align: center;
+            background-color: #f44336; /* Red color */
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar .logout-btn:hover {
+            background-color: #e53935;
         }
 
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h2>Writing Article for {{ writer.first_name }} {{ writer.last_name }} ({{ writer.username }})</h2>
-    </div>
-
-    <div class="container">
-        <h1>Welcome, {{ writer.first_name }} {{ writer.last_name }}!</h1>
-        <p>You are successfully logged in as {{ writer.username }}.</p>
-
-        <h2>Write Your Article</h2>
-
-        <form action="/submit_article/" method="POST" enctype="multipart/form-data" class="article-form">
-            {% csrf_token %}
-
-            <!-- Title Input -->
-            <div>
-                <label for="title">Article Title</label>
-                <input type="text" id="title" name="title" placeholder="Enter the article title" required>
-            </div>
-
-            <!-- Article Body -->
-            <div>
-                <label for="body">Article Body</label>
-                <textarea id="body" name="body" placeholder="Write the article content here" required></textarea>
-            </div>
-
-            <!-- Date Picker -->
-            <div>
-                <label for="date">Article Date</label>
-                <input type="date" id="date" name="date" required>
-            </div>
-
-            <!-- Image Input -->
-            <div>
-                <label for="image">Upload Image</label>
-                <input type="file" id="image" name="image" accept="image/*">
-            </div>
-
-            <!-- URL Input -->
-            <div>
-                <label for="url">Article URL</label>
-                <input type="url" id="url" name="url" placeholder="Enter the article URL (optional)">
-            </div>
-
-            <!-- Tags Input -->
-            <div>
-                <label for="tags">Tags (comma separated)</label>
-                <input type="text" id="tags" name="tags" placeholder="Enter tags for the article (optional)">
-            </div>
-
-            <!-- Submit Button -->
-            <button type="submit">Submit Article</button>
-        </form>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>Dashboard</h2>
+        <div class="profile">
+            <img src="https://via.placeholder.com/80" alt="Profile Picture"> <!-- Replace with actual profile image -->
+            <p>{{ writer.first_name }} {{ writer.last_name }}</p>
+            <p>@{{ writer.username }}</p>
+        </div>
+        <ul>
+            <li class="active" id="add-article">Add New Article</li>
+            <li id="my-articles">My All Articles</li>
+            <li id="status">Status</li>
+        </ul>
+        <div class="logout-btn">
+            Logout
+        </div>
     </div>
 
     <script>
-        // Optional: You can add JS code for additional functionality (such as validating fields)
-        document.querySelector("form").addEventListener("submit", function(event) {
-            const title = document.getElementById("title").value.trim();
-            const body = document.getElementById("body").value.trim();
+        // Add active class to sidebar links
+        const sidebarLinks = document.querySelectorAll('.sidebar ul li');
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                sidebarLinks.forEach(link => link.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
 
-            if (!title || !body) {
-                alert("Title and Article Body are required.");
-                event.preventDefault(); // Prevent form submission
-            }
+        // Logout button functionality (you can modify the logout logic to fit your app's needs)
+        const logoutButton = document.querySelector('.logout-btn');
+        logoutButton.addEventListener('click', function() {
+            // Redirect to the logout URL or perform the necessary logout action
+            window.location.href = '{% url 'writerlogin'%}'; // Modify with your actual logout URL
         });
     </script>
+
 </body>
 </html>
